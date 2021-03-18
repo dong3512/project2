@@ -54,6 +54,7 @@ public class MemberTable implements DataTable{
       case "member/select":
         int no = Integer.parseInt(request.getData().get(0));
 
+        member = getMember(no);
         if (member != null) {
           response.appendData(String.format("%d,%s,%s,%s,%s,%s", 
               member.getNo(), 

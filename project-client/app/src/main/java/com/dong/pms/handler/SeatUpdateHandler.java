@@ -1,45 +1,56 @@
 package com.dong.pms.handler;
 
-import java.util.List;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import com.dong.pms.domain.Seat;
 import com.dong.util.Prompt;
 
-public class SeatUpdateHandler extends AbstractSeatHandler{
-
-  public SeatUpdateHandler(List<Seat> seatList) {
-    super(seatList);
-  }
-
+public class SeatUpdateHandler implements Command{
   @Override
-  public void service(){
+  public void service(DataInputStream in, DataOutputStream out) throws Exception {
     System.out.println("[좌석정보 수정]");
 
     int no = Prompt.inputInt("번호? ");
 
-    Seat seat = findByNo(no);
-    if (seat == null) {
-      System.out.println("해당 번호의 좌석이 없습니다.");
+    out.writeUTF("seat/select");
+    out.writeInt(1);
+    out.writeUTF(Integer.toString(no));
+    out.flush();
+
+    String status = in.readUTF();
+    in.readInt();
+
+    if (status.equals("error")) {
+      System.out.println(in.readUTF());
       return;
     }
 
-    String mgrade = Prompt.inputString(String.format("회원등급(%s)? ", seat.getMgrade()));
-    int sgrade = Prompt.inputInt(String.format("좌석등급(%s)?\n0: 퍼스트 \n1: 비즈니스\n2: 이코노미", gradeLabel(seat.getSgrade())));
-    String sno = Prompt.inputString(String.format("좌석번호(%s)?(취소: 빈 문자열) ", seat.getSno()));
-    if(sno == null) {
-      System.out.println("작업 변경을 취소합니다.");
-      return;
-    }
+    String[] fields = in.readUTF().split(",");
 
+    String mgrade = Prompt.inputString(String.format("회원등급(%s)? ", fields[1]));
+    int sgrade = Prompt.inputInt(String.format("좌석등급(%s)?\n0: 퍼스트 \n1: 비즈니스\n2: 이코노미\n> ",
+        Seat.getStatusLabel(Integer.parseInt(fields[2]))));
+    String sno = Prompt.inputString(String.format("좌석번호(%s)?(취소: 빈 문자열) ", fields[3]));
+    String etc = Prompt.inputString(String.format("특이사항(%s)? ", fields[4]));
     String input = Prompt.inputString("정말 변경하시겠습니까?(y/N)");
 
-    if (input.equalsIgnoreCase("Y")) {
-      seat.setMgrade(mgrade);
-      //                seat.sgrade = sgrade; 오류의 이유를 모르겠습니다 ㅠ switch문이 들어가있긴함 ㅎ
-      seat.setSno(sno);
-      System.out.println("게시글을 변경하였습니다.");
-    }else {
-      System.out.println("게시글 변경을 취소하였습니다.");
+    if (!input.equalsIgnoreCase("Y")) {
+      System.out.println("좌석정보 변경을 취소하였습니다.");
+      return;
     }
+    out.writeUTF("seat/update");
+    out.writeInt(1);
+    out.writeUTF(String.format("%s,%s,%s,%s,%s", no , mgrade, sgrade, sno, etc));
+    out.flush();
+
+    status = in.readUTF();
+    in.readInt();
+
+    if (status.equals("error")) {
+      System.out.println(in.readUTF());
+      return;
+    }
+    System.out.println("좌석정보를 변경하였습니다.");
   }
 
 }

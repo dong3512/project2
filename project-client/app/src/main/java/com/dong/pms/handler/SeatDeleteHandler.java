@@ -1,35 +1,50 @@
 package com.dong.pms.handler;
 
-import java.util.List;
-import com.dong.pms.domain.Seat;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import com.dong.util.Prompt;
 
-public class SeatDeleteHandler extends AbstractSeatHandler{
-
-  public SeatDeleteHandler(List<Seat> seatList) {
-    super(seatList);
-  }
+public class SeatDeleteHandler implements Command{
   @Override
-  public void service(){
+  public void service(DataInputStream in, DataOutputStream out) throws Exception {
     System.out.println("[좌석정보 삭제]");
 
     int no = Prompt.inputInt("번호? ");
 
-    Seat seat = findByNo(no);
-    if (seat == null) {
-      System.out.println("해당 번호의 좌석이 없습니다.");
+    out.writeUTF("seat/select");
+    out.writeInt(1);
+    out.writeUTF(Integer.toString(no));
+    out.flush();
+
+    String status = in.readUTF();
+    in.readInt();
+    String data = in.readUTF();
+
+    if (status.equals("error")) {
+      System.out.println(data);
       return;
     }
 
     String input = Prompt.inputString("정말 삭제하시겠습니까?(y/N)");
 
-    if(input.equalsIgnoreCase("Y")) {
-      seatList.remove(seat);
-
-      System.out.println("게시글을 삭제하였습니다.");
-    }else {
-      System.out.println("게시글 삭제를 취소하였습니다.");
+    if(!input.equalsIgnoreCase("Y")) {
+      System.out.println("좌석정보 삭제를 취소하였습니다.");
+      return;
     }
+
+    out.writeUTF("seat/delete");
+    out.writeInt(1);
+    out.writeUTF(Integer.toString(no));
+    out.flush();
+
+    status = in.readUTF();
+    in.readInt();
+
+    if (status.equals("error")) {
+      System.out.println(in.readUTF());
+      return;
+    }
+    System.out.println("좌석정보를 삭제하였습니다.");
   }
 
 }

@@ -33,7 +33,7 @@ public class MemberUpdateHandler implements Command {
     String hp = Prompt.inputString(String.format("전화번호(%s)? ", fields[4]));
 
     String input = Prompt.inputString("정말 변경하시겠습니까?(y/N)");
-    if(input.equalsIgnoreCase("Y")) {
+    if(!input.equalsIgnoreCase("Y")) {
       System.out.println("회원정보 변경을 취소하였습니다.");
       return;
     }
