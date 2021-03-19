@@ -24,6 +24,7 @@ public class Board {
     this.setRegisteredDate(Date.valueOf(fields[5]));
     this.setViewCount(Integer.parseInt(fields[6]));
 
+    
   }
 
   @Override
