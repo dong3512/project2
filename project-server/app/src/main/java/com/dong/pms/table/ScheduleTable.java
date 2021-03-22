@@ -37,24 +37,25 @@ public class ScheduleTable implements DataTable{
 
         schedule.setDestination(fields[0]);
         schedule.setAirno(fields[1]);
-        schedule.setName(fields[2]);
-        schedule.setDtime(Time.valueOf(fields[3]));
-        schedule.setAtime(Time.valueOf(fields[4]));
+        schedule.setDtime(Time.valueOf(fields[2]));
+        schedule.setAtime(Time.valueOf(fields[3]));
+        schedule.setName(fields[4]);
         schedule.setPilot(fields[5]);
 
         list.add(schedule);
 
         JsonFileHandler.saveObjects(jsonFile, list);
         break;
+
       case "schedule/selectall":
         for (Schedule s : list) {
           response.appendData(String.format("%d,%s,%s,%s,%s,%s,%s",
               s.getNo(),
               s.getDestination(),
               s.getAirno(),
-              s.getName(),
               s.getDtime(),
               s.getAtime(),
+              s.getName(),
               s.getPilot()));
         }
         break;
@@ -67,9 +68,9 @@ public class ScheduleTable implements DataTable{
               schedule.getNo(),
               schedule.getDestination(),
               schedule.getAirno(),
-              schedule.getName(),
               schedule.getDtime(),
               schedule.getAtime(),
+              schedule.getName(),
               schedule.getPilot()));
         }else {
           throw new Exception("해당 번호의 스케줄이 없습니다.");
@@ -83,13 +84,12 @@ public class ScheduleTable implements DataTable{
           throw new Exception("해당 번호의 스케줄이 없습니다.");
         }
 
-        schedule.setDestination(fields[0]);
-        schedule.setAirno(fields[1]);
-        schedule.setName(fields[2]);
+        schedule.setDestination(fields[1]);
+        schedule.setAirno(fields[2]);
         schedule.setDtime(Time.valueOf(fields[3]));
         schedule.setAtime(Time.valueOf(fields[4]));
-        schedule.setPilot(fields[5]);
-
+        schedule.setName(fields[5]);
+        schedule.setPilot(fields[6]);
 
         JsonFileHandler.saveObjects(jsonFile, list);
         break;

@@ -22,7 +22,7 @@ public class ScheduleListHandler implements Command{
 
     for (int i = 0; i < length; i++) {
       String[] fields = in.readUTF().split(",");
-      System.out.printf("%s, %s, %s, %s, %s, %s, %s\n",
+      System.out.printf("%s, %s, %s, %s, %s, %s\n",
           fields[0], 
           fields[1], 
           fields[2],
@@ -32,6 +32,4 @@ public class ScheduleListHandler implements Command{
 
     }
   }
-
-
 }

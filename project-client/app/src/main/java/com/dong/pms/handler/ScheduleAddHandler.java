@@ -35,7 +35,6 @@ public class ScheduleAddHandler implements Command{
         s.getPilot()));
     out.flush();
 
-    // 서버의 응답을 읽는다.
     String status = in.readUTF();
     in.readInt();
 
