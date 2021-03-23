@@ -88,10 +88,9 @@ public class BoardTable implements DataTable {
           throw new Exception("해당 번호의 게시글이 없습니다.");
         }
 
-        board.setTitle(fields[0]);
-        board.setContent(fields[1]);
-        board.setMessage(fields[2]);
-        board.setWriter(fields[3]);
+        board.setTitle(fields[1]);
+        board.setContent(fields[2]);
+        board.setMessage(fields[3]);
 
         JsonFileHandler.saveObjects(jsonFile, list);
         break;
