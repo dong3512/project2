@@ -1,31 +1,22 @@
 package com.dong.pms.handler;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import com.dong.driver.Statement;
 import com.dong.pms.domain.Seat;
 import com.dong.util.Prompt;
 
 public class SeatUpdateHandler implements Command{
+  Statement stmt;
+  public SeatUpdateHandler(Statement stmt) {
+    this.stmt = stmt;
+  }
   @Override
-  public void service(DataInputStream in, DataOutputStream out) throws Exception {
+  public void service() throws Exception {
     System.out.println("[좌석정보 수정]");
 
     int no = Prompt.inputInt("번호? ");
 
-    out.writeUTF("seat/select");
-    out.writeInt(1);
-    out.writeUTF(Integer.toString(no));
-    out.flush();
 
-    String status = in.readUTF();
-    in.readInt();
-
-    if (status.equals("error")) {
-      System.out.println(in.readUTF());
-      return;
-    }
-
-    String[] fields = in.readUTF().split(",");
+    String[] fields = stmt.executeQuery("seat/select", Integer.toString(no)).next().split(",");
 
     String mgrade = Prompt.inputString(String.format("회원등급(%s)? ", fields[1]));
     int sgrade = Prompt.inputInt(String.format("좌석등급(%s)?\n0: 퍼스트 \n1: 비즈니스\n2: 이코노미\n> ",
@@ -38,18 +29,10 @@ public class SeatUpdateHandler implements Command{
       System.out.println("좌석정보 변경을 취소하였습니다.");
       return;
     }
-    out.writeUTF("seat/update");
-    out.writeInt(1);
-    out.writeUTF(String.format("%s,%s,%s,%s,%s", no , mgrade, sgrade, sno, etc));
-    out.flush();
 
-    status = in.readUTF();
-    in.readInt();
+    stmt.executeUpdate("seat/update", 
+        String.format("%s,%s,%s,%s,%s", no, mgrade, sgrade, sno, etc));
 
-    if (status.equals("error")) {
-      System.out.println(in.readUTF());
-      return;
-    }
     System.out.println("좌석정보를 변경하였습니다.");
   }
 

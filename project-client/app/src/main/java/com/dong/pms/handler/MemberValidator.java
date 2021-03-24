@@ -1,12 +1,17 @@
 package com.dong.pms.handler;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import com.dong.driver.Statement;
 import com.dong.util.Prompt;
 
 public class MemberValidator {
 
-  public static String inputMember(String promptTitle, DataInputStream in, DataOutputStream out) throws Exception {
+  Statement stmt;
+
+  public MemberValidator(Statement stmt) {
+    this.stmt = stmt;
+  }
+
+  public  String inputMember(String promptTitle) {
 
     while (true) {
       String name = Prompt.inputString(promptTitle);
@@ -14,35 +19,23 @@ public class MemberValidator {
         return null;
       }
 
-      out.writeUTF("member/selectByName");
-      out.writeInt(1);
-      out.writeUTF(name);
-      out.flush();
-
-      String status = in.readUTF();
-      in.readInt();
-      String data = in.readUTF();
-
-      if (status.equals("success")) {
-        String[] fields = data.split(",");
-        return fields[1];
-
+      try {
+        return this.stmt.executeQuery("member/selectByName", name).next().split(",")[1];
+      } catch (Exception e) {
+        System.out.println("등록된 회원이 아닙니다.");
       }
-      System.out.println("등록된 회원이 아닙니다.");
     }
   }
 
-  public static String inputMembers(
-      String promptTitle, DataInputStream in, DataOutputStream out) throws Exception{
-
+  public String inputMembers(String promptTitle) {
     String members = "";
     while (true) {
-      String name = inputMember(promptTitle, in, out);
+      String name = inputMember(promptTitle);
       if (name == null) {
         return members;
       } else {
         if (!members.isEmpty()) {
-          members += ",";
+          members += "/";
         }
         members += name;
       }

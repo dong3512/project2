@@ -1,13 +1,17 @@
 package com.dong.pms.handler;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import com.dong.driver.Statement;
 import com.dong.pms.domain.Seat;
 import com.dong.util.Prompt;
 
 public class SeatAddHandler implements Command{
+  Statement stmt;
+  public SeatAddHandler(Statement stmt) {
+    this.stmt = stmt;
+  }
+
   @Override
-  public void service(DataInputStream in, DataOutputStream out) throws Exception {
+  public void service() throws Exception {
     System.out.println("[좌석 등록]");
 
     Seat t = new Seat();
@@ -17,22 +21,13 @@ public class SeatAddHandler implements Command{
     t.setSno(Prompt.inputString("좌석번호: "));
     t.setEtc(Prompt.inputString("특이사항: "));
 
-    out.writeUTF("seat/insert");
-    out.writeInt(1);
-    out.writeUTF(String.format("%s,%s,%s,%s", 
-        t.getMgrade(),
-        t.getSgrade(),
-        t.getSno(),
-        t.getEtc()));
-    out.flush();
+    stmt.executeUpdate("seat/insert",
+        String.format("%s,%s,%s,%s",
+            t.getMgrade(),
+            t.getSgrade(),
+            t.getSno(),
+            t.getEtc()));
 
-    String status = in.readUTF();
-    in.readInt();
-
-    if (status.equals("error")) {
-      System.out.println(in.readUTF());
-      return;
-    }
     System.out.println("좌석을 등록했습니다.");
   }
 
