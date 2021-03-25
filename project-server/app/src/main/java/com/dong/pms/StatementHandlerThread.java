@@ -26,6 +26,7 @@ public class StatementHandlerThread extends Thread{
 
     try (DataOutputStream out = new DataOutputStream(socket.getOutputStream());
         DataInputStream in = new DataInputStream(socket.getInputStream())) {
+
       while (true) {
         Request request = receiveRequest(in);
         log(request);
