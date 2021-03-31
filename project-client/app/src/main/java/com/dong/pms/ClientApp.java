@@ -4,7 +4,6 @@ import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
-import com.dong.driver.Statement;
 import com.dong.pms.handler.BoardAddHandler;
 import com.dong.pms.handler.BoardDeleteHandler;
 import com.dong.pms.handler.BoardDetailHandler;
@@ -42,6 +41,7 @@ public class ClientApp {
     ClientApp app = new ClientApp("localhost", 8888);
     try {
       app.execute();
+
     }catch (Exception e) {
       System.out.println("클라이언트 실행 중 오류 발생!");
       e.printStackTrace();
@@ -55,16 +55,14 @@ public class ClientApp {
 
   public void execute() throws Exception{
 
-    Statement stmt = new Statement(serverAddress, port);
-
     HashMap<String,Command> commandMap = new HashMap<>();
 
-    commandMap.put("/board/add", new BoardAddHandler(stmt));
-    commandMap.put("/board/list", new BoardListHandler(stmt));
-    commandMap.put("/board/detail", new BoardDetailHandler(stmt));
-    commandMap.put("/board/update", new BoardUpdateHandler(stmt));
-    commandMap.put("/board/delete", new BoardDeleteHandler(stmt));
-    commandMap.put("/board/search", new BoardSearchHandler(stmt));
+    commandMap.put("/board/add", new BoardAddHandler());
+    commandMap.put("/board/list", new BoardListHandler());
+    commandMap.put("/board/detail", new BoardDetailHandler());
+    commandMap.put("/board/update", new BoardUpdateHandler());
+    commandMap.put("/board/delete", new BoardDeleteHandler());
+    commandMap.put("/board/search", new BoardSearchHandler());
 
     commandMap.put("/member/add", new MemberAddHandler(stmt));
     commandMap.put("/member/list", new MemberListHandler(stmt));

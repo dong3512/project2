@@ -1,36 +1,33 @@
 package com.dong.pms.handler;
 
-import java.util.Iterator;
-import com.dong.driver.Statement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class BoardListHandler implements Command{
-
-  Statement stmt;
-
-  public BoardListHandler (Statement stmt) {
-    this.stmt = stmt;
-  }
 
   @Override
   public void service() throws Exception {
     System.out.println("[칭찬게시글 목록]");
 
-    Iterator<String> results = stmt.executeQuery("board/selectall");
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/projectdb?user=project&password=1111");
+        PreparedStatement stmt =con.prepareStatement(
+            "select no,title,message,writer,cdt,vw_cnt from pms_board order by no desc");
+        ResultSet rs = stmt.executeQuery()) {
 
-    while (results.hasNext()) {
-      String[] fields = results.next().split(",");
-
-      System.out.printf("%s, %s, %s, %s, %s, %s, %s\n", 
-          fields[0], 
-          fields[1], 
-          fields[2],
-          fields[3],
-          fields[4],
-          fields[5],
-          fields[6]);
+      while (rs.next()) {
+        System.out.printf("%s, %s, %s, %s, %s, %s, %s\n", 
+            rs.getInt("no"),
+            rs.getString("title"),
+            rs.getString("message"),
+            rs.getString("writer"),
+            rs.getDate("cdt"),
+            rs.getInt("vw_cnt"));
+      }
     }
+
+
   }
-
-
 }
-
