@@ -1,16 +1,16 @@
 package com.dong.pms.handler;
 
-import com.dong.driver.Statement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import com.dong.pms.domain.Schedule;
 import com.dong.util.Prompt;
 
 public class ScheduleAddHandler implements Command{
 
-  Statement stmt;
   MemberValidator memberValidator;
 
-  public ScheduleAddHandler(Statement stmt,MemberValidator memberValidator) {
-    this.stmt = stmt;
+  public ScheduleAddHandler(MemberValidator memberValidator) {
     this.memberValidator = memberValidator;
   }
 
@@ -33,17 +33,23 @@ public class ScheduleAddHandler implements Command{
 
     s.setPilot(Prompt.inputString("조종사: "));
 
-    stmt.executeUpdate("schedule/insert",
-        String.format("%s,%s,%s,%s,%s,%s",
-            s.getDestination(),
-            s.getAirno(),
-            s.getDtime(),
-            s.getAtime(),
-            s.getName(),
-            s.getPilot()));
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/projectdb?user=project&password=1111");
+        PreparedStatement stmt =con.prepareStatement(
+            "insert into pms_schedule(dtn,ano,dtime,atime,name,pilot)"
+                + " values(?,?,?,?,?,?)");) {
 
-    System.out.println("비행일정을 등록했습니다.");
+      stmt.setString(1, s.getDestination());
+      stmt.setString(2, s.getAirno());
+      stmt.setTime(3, s.getDtime());
+      stmt.setTime(4, s.getAtime());
+      stmt.setString(5, s.getName());
+      stmt.setString(6, s.getPilot());
+      stmt.executeUpdate();
+
+      System.out.println("비행일정을 등록했습니다.");
+
+    }
 
   }
-
 }

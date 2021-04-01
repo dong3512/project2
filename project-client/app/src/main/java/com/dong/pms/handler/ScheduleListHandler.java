@@ -1,32 +1,32 @@
 package com.dong.pms.handler;
 
-import java.util.Iterator;
-import com.dong.driver.Statement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class ScheduleListHandler implements Command{
-
-  Statement stmt;
-
-  public ScheduleListHandler(Statement stmt) {
-    this.stmt = stmt;
-  }
 
   @Override
   public void service() throws Exception {
     System.out.println("[비행일정 목록]");
 
-    Iterator<String> results = stmt.executeQuery("schedule/selectall");
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/projectdb?user=project&password=1111");
+        PreparedStatement stmt =con.prepareStatement(
+            "select no,dtn,ano,dtime,atime,name,pilot from pms_schedule order by dtime asc");
+        ResultSet rs = stmt.executeQuery()) {
 
-    while (results.hasNext()) {
-      String[] fields = results.next().split(",");
-      System.out.printf("%s, %s, %s, %s, %s, %s\n",
-          fields[0], 
-          fields[1], 
-          fields[2],
-          fields[3],
-          fields[4],
-          fields[5]);
-
+      while (rs.next()) {
+        System.out.printf("%s, %s, %s, %s, %s, %s, %s\n",
+            rs.getInt("no"),
+            rs.getString("dtn"),
+            rs.getString("ano"),
+            rs.getTime("dtime"),
+            rs.getTime("atime"),
+            rs.getString("name"),
+            rs.getString("pilot"));
+      }
     }
   }
 }

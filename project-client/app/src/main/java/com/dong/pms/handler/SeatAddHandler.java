@@ -1,14 +1,12 @@
 package com.dong.pms.handler;
 
-import com.dong.driver.Statement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import com.dong.pms.domain.Seat;
 import com.dong.util.Prompt;
 
 public class SeatAddHandler implements Command{
-  Statement stmt;
-  public SeatAddHandler(Statement stmt) {
-    this.stmt = stmt;
-  }
 
   @Override
   public void service() throws Exception {
@@ -21,16 +19,18 @@ public class SeatAddHandler implements Command{
     t.setSno(Prompt.inputString("좌석번호: "));
     t.setEtc(Prompt.inputString("특이사항: "));
 
-    stmt.executeUpdate("seat/insert",
-        String.format("%s,%s,%s,%s",
-            t.getMgrade(),
-            t.getSgrade(),
-            t.getSno(),
-            t.getEtc()));
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/projectdb?user=project&password=1111");
+        PreparedStatement stmt =con.prepareStatement(
+            "insert into pms_seat(mgrade,sgrade,sno,etc) values(?,?,?,?)");) {
 
-    System.out.println("좌석을 등록했습니다.");
+      stmt.setString(1, t.getMgrade());
+      stmt.setInt(2, t.getSgrade());
+      stmt.setString(3, t.getSno());
+      stmt.setString(4, t.getEtc());
+      stmt.executeUpdate();
+
+      System.out.println("좌석을 등록했습니다.");
+    }
   }
-
 }
-
-
