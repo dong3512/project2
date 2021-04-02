@@ -42,7 +42,8 @@ public class SeatUpdateHandler implements Command{
       t.setSgrade(Prompt.inputInt(String.format("좌석등급(%s)?\n0: 퍼스트 \n1: 비즈니스\n2: 이코노미\n> ",
           Seat.getStatusLabel(t.getSgrade()))));
       t.setSno(Prompt.inputString(String.format("좌석번호(%s)?(취소: 빈 문자열) ", t.getSno())));
-      String etc = Prompt.inputString(String.format("특이사항(%s)? ", fields[4]));
+      String etc = Prompt.inputString(String.format("특이사항(%s)? ", t.getEtc()));
+
       String input = Prompt.inputString("정말 변경하시겠습니까?(y/N)");
 
       if (!input.equalsIgnoreCase("Y")) {
@@ -50,12 +51,17 @@ public class SeatUpdateHandler implements Command{
         return;
       }
 
-      stmt.executeUpdate("seat/update", 
-          String.format("%s,%s,%s,%s,%s", no, mgrade, sgrade, sno, etc));
+      stmt2.setString(1, t.getMgrade());
+      stmt2.setInt(2, t.getSgrade());
+      stmt2.setString(3, t.getSno());
+      stmt2.setString(4, t.getEtc());
+      stmt2.executeUpdate();
+
 
       System.out.println("좌석정보를 변경하였습니다.");
     }
 
   }
+}
 
 

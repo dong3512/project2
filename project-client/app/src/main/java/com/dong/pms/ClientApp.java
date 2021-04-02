@@ -64,25 +64,25 @@ public class ClientApp {
     commandMap.put("/board/delete", new BoardDeleteHandler());
     commandMap.put("/board/search", new BoardSearchHandler());
 
-    commandMap.put("/member/add", new MemberAddHandler(stmt));
-    commandMap.put("/member/list", new MemberListHandler(stmt));
-    commandMap.put("/member/detail", new MemberDetailHandler(stmt));
-    commandMap.put("/member/update", new MemberUpdateHandler(stmt));
-    commandMap.put("/member/delete", new MemberDeleteHandler(stmt));
+    commandMap.put("/member/add", new MemberAddHandler());
+    commandMap.put("/member/list", new MemberListHandler());
+    commandMap.put("/member/detail", new MemberDetailHandler());
+    commandMap.put("/member/update", new MemberUpdateHandler());
+    commandMap.put("/member/delete", new MemberDeleteHandler());
 
-    MemberValidator memberValidator = new MemberValidator(stmt);
+    MemberValidator memberValidator = new MemberValidator();
 
-    commandMap.put("/schedule/add", new ScheduleAddHandler(stmt, memberValidator));
-    commandMap.put("/schedule/list", new ScheduleListHandler(stmt));
-    commandMap.put("/schedule/detail", new ScheduleDetailHandler(stmt));
-    commandMap.put("/schedule/update", new ScheduleUpdateHandler(stmt, memberValidator));
-    commandMap.put("/schedule/delete", new ScheduleDeleteHandler(stmt));
+    commandMap.put("/schedule/add", new ScheduleAddHandler( memberValidator));
+    commandMap.put("/schedule/list", new ScheduleListHandler());
+    commandMap.put("/schedule/detail", new ScheduleDetailHandler());
+    commandMap.put("/schedule/update", new ScheduleUpdateHandler( memberValidator));
+    commandMap.put("/schedule/delete", new ScheduleDeleteHandler());
 
-    commandMap.put("/seat/add", new SeatAddHandler(stmt));
-    commandMap.put("/seat/list", new SeatListHandler(stmt));
-    commandMap.put("/seat/detail", new SeatDetailHandler(stmt));
-    commandMap.put("/seat/update", new SeatUpdateHandler(stmt));
-    commandMap.put("/seat/delete", new SeatDeleteHandler(stmt));
+    commandMap.put("/seat/add", new SeatAddHandler());
+    commandMap.put("/seat/list", new SeatListHandler());
+    commandMap.put("/seat/detail", new SeatDetailHandler());
+    commandMap.put("/seat/update", new SeatUpdateHandler());
+    commandMap.put("/seat/delete", new SeatDeleteHandler());
 
     try{
 
@@ -107,8 +107,6 @@ public class ClientApp {
               break;
             case "quit":
             case "exit":
-
-              stmt.executeUpdate("quit");
 
               System.out.println("사용해주셔서 감사합니다.");
               return;
@@ -135,7 +133,6 @@ public class ClientApp {
     }
 
     Prompt.close();
-    stmt.close();
   }
 
   static void printCommandHistory(Iterator<String> iterator) {

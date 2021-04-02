@@ -4,15 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import com.dong.driver.Statement;
 import com.dong.pms.domain.Seat;
 import com.dong.util.Prompt;
 
 public class SeatDetailHandler implements Command{
-  Statement stmt;
-  public SeatDetailHandler(Statement stmt) {
-    this.stmt = stmt;
-  }
   @Override
   public void service() throws Exception {
     System.out.println("[좌석 상세보기]");
