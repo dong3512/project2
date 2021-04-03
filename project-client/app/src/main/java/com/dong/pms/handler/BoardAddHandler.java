@@ -31,6 +31,7 @@ public class BoardAddHandler implements Command {
       stmt.executeUpdate();
 
       System.out.println("게시글을 등록하였습니다.");
+      System.out.println("11");
     }
   }
 }
