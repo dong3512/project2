@@ -17,9 +17,9 @@ public class MemberUpdateHandler implements Command {
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/projectdb?user=project&password=1111");
         PreparedStatement stmt =con.prepareStatement(
-            "select* from pms_member where no=?");
+            "select * from pms_member where no=?");
         PreparedStatement stmt2 =con.prepareStatement(
-            "update pms_member set name=?,email=?,password=password(?),photo=?,hp? where no=?")) {
+            "update pms_member set name=?,email=?,password=password(?),photo=?,hp=? where no=?")) {
 
       Member member = new Member();
 

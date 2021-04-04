@@ -18,7 +18,7 @@ public class BoardListHandler implements Command{
         ResultSet rs = stmt.executeQuery()) {
 
       while (rs.next()) {
-        System.out.printf("%s, %s, %s, %s, %s, %s, %s\n", 
+        System.out.printf("%s, %s, %s, %s, %s, %s\n", 
             rs.getInt("no"),
             rs.getString("title"),
             rs.getString("message"),

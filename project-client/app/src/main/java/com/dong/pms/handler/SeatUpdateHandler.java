@@ -55,6 +55,7 @@ public class SeatUpdateHandler implements Command{
       stmt2.setInt(2, t.getSgrade());
       stmt2.setString(3, t.getSno());
       stmt2.setString(4, t.getEtc());
+      stmt2.setInt(5, t.getNo());
       stmt2.executeUpdate();
 
 

@@ -32,7 +32,7 @@ public class BoardDetailHandler implements Command{
         System.out.printf("전하고싶은말: %s\n", rs.getString("message"));
         System.out.printf("등록일: %s\n", rs.getDate("cdt"), rs.getTime("cdt"));
         System.out.printf("작성자: %s\n", rs.getString("writer"));
-        System.out.printf("조회수: %d\n", rs.getString("vw_cnt"));
+        System.out.printf("조회수: %d\n", rs.getInt("vw_cnt"));
       }
     }
   }

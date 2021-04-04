@@ -15,11 +15,11 @@ public class SeatListHandler implements Command{
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/projectdb?user=project&password=1111");
         PreparedStatement stmt =con.prepareStatement(
-            "select no,mgrade,sgrade,sno,etc from pms_schedule order by sgrade desc");
+            "select no,mgrade,sgrade,sno,etc from pms_seat order by sgrade desc");
         ResultSet rs = stmt.executeQuery()) {
 
       while (rs.next()) {
-        System.out.printf("%d, %s, %d, %s, %s\n",
+        System.out.printf("%d, %s, %s, %s, %s\n",
             rs.getInt("no"),
             rs.getString("mgrade"),
             Seat.getStatusLabel(rs.getInt("sgrade")),

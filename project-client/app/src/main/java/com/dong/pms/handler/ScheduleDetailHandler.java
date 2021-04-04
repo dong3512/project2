@@ -17,7 +17,7 @@ public class ScheduleDetailHandler implements Command{
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/projectdb?user=project&password=1111");
         PreparedStatement stmt =con.prepareStatement(
-            "select * from pms_board where no = ?")) {
+            "select * from pms_schedule where no = ?")) {
 
       stmt.setInt(1, no);
 
