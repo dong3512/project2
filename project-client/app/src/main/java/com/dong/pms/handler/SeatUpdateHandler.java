@@ -9,6 +9,12 @@ import com.dong.util.Prompt;
 
 public class SeatUpdateHandler implements Command{
 
+  MemberValidator memberValidator;
+
+  public SeatUpdateHandler(MemberValidator memberValidator) {
+    this.memberValidator = memberValidator;
+  }
+
   @Override
   public void service() throws Exception {
     System.out.println("[좌석정보 수정]");
@@ -20,7 +26,7 @@ public class SeatUpdateHandler implements Command{
         PreparedStatement stmt =con.prepareStatement(
             "select * from pms_seat where no=?");
         PreparedStatement stmt2 =con.prepareStatement(
-            "update pms_seat set mgrade=?,sgrade=?,sno=?,etc=? where no=?")) {
+            "update pms_seat set guest=?,mgrade=?,sgrade=?,sno=?,etc=? where no=?")) {
 
       Seat t = new Seat();
 
@@ -32,12 +38,20 @@ public class SeatUpdateHandler implements Command{
         }
 
         t.setNo(no); 
+        t.setGuest(rs.getString("guest"));
         t.setMgrade(rs.getString("mgrade"));
         t.setSgrade(rs.getInt("sgrade"));
         t.setSno(rs.getString("sno"));
         t.setEtc(rs.getString("etc"));
       }
 
+      t.setGuest(memberValidator.inputMember(String.format("회원명?(%s)(취소: 빈 문자열) ",t.getGuest())));
+      if (t.getGuest() == null) {
+        System.out.println("회원명 등록을 취소하였습니다.");
+        return;
+      }
+
+      t.setGuest(Prompt.inputString(String.format("회원명(%s)? ", t.getGuest())));
       t.setMgrade(Prompt.inputString(String.format("회원등급(%s)? ", t.getMgrade())));
       t.setSgrade(Prompt.inputInt(String.format("좌석등급(%s)?\n0: 퍼스트 \n1: 비즈니스\n2: 이코노미\n> ",
           Seat.getStatusLabel(t.getSgrade()))));
@@ -51,11 +65,12 @@ public class SeatUpdateHandler implements Command{
         return;
       }
 
-      stmt2.setString(1, t.getMgrade());
-      stmt2.setInt(2, t.getSgrade());
-      stmt2.setString(3, t.getSno());
-      stmt2.setString(4, t.getEtc());
-      stmt2.setInt(5, t.getNo());
+      stmt2.setString(1, t.getGuest());
+      stmt2.setString(2, t.getMgrade());
+      stmt2.setInt(3, t.getSgrade());
+      stmt2.setString(4, t.getSno());
+      stmt2.setString(5, t.getEtc());
+      stmt2.setInt(6, t.getNo());
       stmt2.executeUpdate();
 
 

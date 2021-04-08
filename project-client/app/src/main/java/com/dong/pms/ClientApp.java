@@ -78,10 +78,10 @@ public class ClientApp {
     commandMap.put("/schedule/update", new ScheduleUpdateHandler( memberValidator));
     commandMap.put("/schedule/delete", new ScheduleDeleteHandler());
 
-    commandMap.put("/seat/add", new SeatAddHandler());
+    commandMap.put("/seat/add", new SeatAddHandler(memberValidator));
     commandMap.put("/seat/list", new SeatListHandler());
     commandMap.put("/seat/detail", new SeatDetailHandler());
-    commandMap.put("/seat/update", new SeatUpdateHandler());
+    commandMap.put("/seat/update", new SeatUpdateHandler(memberValidator));
     commandMap.put("/seat/delete", new SeatDeleteHandler());
 
     try{

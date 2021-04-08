@@ -27,6 +27,7 @@ public class SeatDetailHandler implements Command{
           return;
         }
 
+        System.out.printf("회원명: %s\n", rs.getString("guest"));
         System.out.printf("회원등급: %s\n", rs.getString("mgrade"));
         System.out.printf("좌석등급: %s\n", Seat.getStatusLabel(rs.getInt("sgrade")));
         System.out.printf("좌석번호: %s\n", rs.getString("sno"));
