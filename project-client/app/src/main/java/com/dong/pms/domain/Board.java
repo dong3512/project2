@@ -23,8 +23,6 @@ public class Board {
     this.setWriter(fields[4]);
     this.setRegisteredDate(Date.valueOf(fields[5]));
     this.setViewCount(Integer.parseInt(fields[6]));
-
-    
   }
 
   @Override

@@ -31,7 +31,7 @@ public class ScheduleDetailHandler implements Command{
         System.out.printf("항공기번호: %s\n",rs.getString("ano"));
         System.out.printf("출발시간: %s\n", rs.getTime("dtime"));
         System.out.printf("도착시간: %s\n", rs.getTime("atime"));
-        System.out.printf("탑승자이름: %s\n", rs.getString("name"));
+        System.out.printf("탑승자이름: %s\n", rs.getString("guest"));
         System.out.printf("조종사: %s\n", rs.getString("pilot"));
       }
     }

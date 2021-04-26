@@ -14,7 +14,7 @@ public class ScheduleListHandler implements Command{
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/projectdb?user=project&password=1111");
         PreparedStatement stmt =con.prepareStatement(
-            "select no,dtn,ano,dtime,atime,name,pilot from pms_schedule order by dtime asc");
+            "select no,dtn,ano,dtime,atime,guest,pilot from pms_schedule order by dtime asc");
         ResultSet rs = stmt.executeQuery()) {
 
       while (rs.next()) {
@@ -24,7 +24,7 @@ public class ScheduleListHandler implements Command{
             rs.getString("ano"),
             rs.getTime("dtime"),
             rs.getTime("atime"),
-            rs.getString("name"),
+            rs.getString("guest"),
             rs.getString("pilot"));
       }
     }

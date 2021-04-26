@@ -25,8 +25,8 @@ public class ScheduleAddHandler implements Command{
     s.setDtime(Prompt.inputTime("출발시간: "));
     s.setAtime(Prompt.inputTime("도착시간: "));
 
-    s.setName(memberValidator.inputMember("탑승자?(취소: 빈 문자열) "));
-    if (s.getName() == null) {
+    s.setGuest(memberValidator.inputMember("탑승자?(취소: 빈 문자열) "));
+    if (s.getGuest() == null) {
       System.out.println("비행일정 입력을 취소합니다.");
       return;
     }
@@ -36,14 +36,14 @@ public class ScheduleAddHandler implements Command{
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/projectdb?user=project&password=1111");
         PreparedStatement stmt =con.prepareStatement(
-            "insert into pms_schedule(dtn,ano,dtime,atime,name,pilot)"
+            "insert into pms_schedule(dtn,ano,dtime,atime,guest,pilot)"
                 + " values(?,?,?,?,?,?)");) {
 
       stmt.setString(1, s.getDestination());
       stmt.setString(2, s.getAirno());
       stmt.setTime(3, s.getDtime());
       stmt.setTime(4, s.getAtime());
-      stmt.setString(5, s.getName());
+      stmt.setInt(5, s.getGuest().getNo());
       stmt.setString(6, s.getPilot());
       stmt.executeUpdate();
 
