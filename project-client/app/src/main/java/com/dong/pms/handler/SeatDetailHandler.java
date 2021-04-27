@@ -50,6 +50,19 @@ public class SeatDetailHandler implements Command{
         System.out.printf("좌석등급: %s\n", Seat.getStatusLabel(rs.getInt("sgrade")));
         System.out.printf("좌석번호: %s\n", rs.getString("sno"));
         System.out.printf("특이사항: %s\n", rs.getString("etc"));
+
+        StringBuilder strings = new StringBuilder();
+
+        stmt2.setInt(1, no);
+        try (ResultSet partyRs = stmt2.executeQuery()) {
+          while (partyRs.next()) {
+            if (strings.length() > 0) {
+              strings.append(",");
+            }
+            strings.append(partyRs.getString("name"));
+          }
+        }
+        System.out.printf("일행: %s\n", strings);
       }
     }
   }

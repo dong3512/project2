@@ -40,6 +40,8 @@ public class ScheduleUpdateHandler implements Command{
         PreparedStatement stmt2 =con.prepareStatement(
             "update pms_schedule set dtn=?,ano=?,dtime=?,atime=?,guest=?,pilot=? where no=?")) {
 
+      con.setAutoCommit(false);
+
       Schedule schedule = new Schedule();
 
       stmt.setInt(1, no);
@@ -53,7 +55,7 @@ public class ScheduleUpdateHandler implements Command{
         schedule.setDestination(rs.getString("dtn"));
         schedule.setAirno(rs.getString("ano"));
         schedule.setDtime(rs.getTime("dtime"));
-        schedule.setDtime(rs.getTime("atime"));
+        schedule.setAtime(rs.getTime("atime"));
         Member guest = new Member();
         guest.setNo(rs.getInt("guest_no"));
         guest.setName(rs.getString("guest_name"));
@@ -61,8 +63,8 @@ public class ScheduleUpdateHandler implements Command{
         schedule.setPilot(rs.getString("pilot"));
 
         schedule.setDestination(Prompt.inputString(String.format("목적지(%s) ", schedule.getDestination())));
-        schedule.setAirno(Prompt.inputString(String.format("항공기번호(%s)",schedule.getAirno())));
-        schedule.setDtime(Prompt.inputTime(String.format("출발시간(%s)", schedule.getDtime())));
+        schedule.setAirno(Prompt.inputString(String.format("항공기번호(%s) ",schedule.getAirno())));
+        schedule.setDtime(Prompt.inputTime(String.format("출발시간(%s) ", schedule.getDtime())));
         schedule.setAtime(Prompt.inputTime(String.format("도착시간(%s) ", schedule.getAtime())));
         schedule.setGuest(memberValidator.inputMember(
             String.format("탑승자(%s)?(취소: 빈 문자열) ", schedule.getGuest().getName())));
@@ -87,6 +89,8 @@ public class ScheduleUpdateHandler implements Command{
         stmt2.setString(6, schedule.getPilot());
         stmt2.setInt(7, schedule.getNo());
         stmt2.executeUpdate();
+
+        con.commit();
 
         System.out.println("비행일정을 변경하였습니다.");
       }

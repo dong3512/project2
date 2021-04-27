@@ -64,7 +64,7 @@ public class Seat {
   public static String getStatusLabel(int sgrade) {
     switch (sgrade) {
       case 1:
-        return "퍼스트";
+        return "퍼스트클래스";
       case 2:
         return "비즈니스";
       default:

@@ -22,13 +22,22 @@ public class SeatDeleteHandler implements Command{
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/projectdb?user=project&password=1111");
         PreparedStatement stmt =con.prepareStatement(
-            "delete from pms_seat where no = ?")) {
+            "delete from pms_member_seat where seat_no=?");
+        PreparedStatement stmt2 = con.prepareStatement(
+            "delete from pms_seat where no=?")) {
+
+      con.setAutoCommit(false);
 
       stmt.setInt(1, no);
-      if (stmt.executeUpdate() == 0) {
-        System.out.println("해당 번호의 작업이 없습니다.");
+      stmt.executeUpdate();
+
+      stmt2.setInt(1, no);
+      if (stmt2.executeUpdate() == 0) {
+        System.out.println("해당 번호의 좌석정보가 없습니다.");
+
       } else {
-        System.out.println("작업을 삭제하였습니다.");
+        con.commit();
+        System.out.println("좌석정보를 삭제하였습니다.");
       }
     }
   }
