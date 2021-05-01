@@ -12,6 +12,7 @@ public class BoardAddHandler implements Command {
   public void service() throws Exception {
     System.out.println("[칭찬게시글 등록]");
 
+
     Board b = new Board();
 
     b.setTitle(Prompt.inputString("제목"));
